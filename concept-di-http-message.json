@@ -1,0 +1,34 @@
+{
+    "di": {
+        "preference": {
+            
+            "Psr\\Http\\Message\\UriInterface": {
+                "class": "Concept\\Http\\Message\\Uri\\Uri"
+            },
+            "Psr\\Http\\Message\\UriFactoryInterface": {
+                "class": "Concept\\Http\\Message\\Uri\\UriFactory"
+            },
+            "Psr\\Http\\Message\\RequestInterface": {
+                "class": "Concept\\Http\\Message\\Request\\Request"
+            },
+            "Psr\\Http\\Message\\RequestFactoryInterface": {
+                "class": "Concept\\Http\\Message\\Request\\RequestFactory"
+            },
+            "Psr\\Http\\Message\\ServerRequestInterface": {
+                "class": "Concept\\Http\\Message\\Request\\ServerRequest"
+            },
+            "Psr\\Http\\Message\\ServerRequestFactoryInterface": {
+                "class": "Concept\\Http\\Message\\Request\\ServerRequestFactory"
+            },
+            "Psr\\Http\\Message\\ResponseInterface": {
+                "class": "Concept\\Http\\Message\\Response"
+            },
+            "Psr\\Http\\Message\\StreamInterface": {
+                "class": "Concept\\Http\\Message\\Stream\\Stream"
+            },
+            "Psr\\Http\\Message\\StreamFactoryInterface": {
+                "class": "Concept\\Http\\Message\\Stream\\StreamFactory"
+            }
+        }
+    }
+}

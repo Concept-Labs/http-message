@@ -1,0 +1,29 @@
+{
+    "name": "concept-labs/http-message",
+    "description": "(C)oncept-Labs HTTP",
+    "keywords": ["php", "http", "http-message", "psr-7"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Victor Galitsky",
+            "email": "concept.galitsky@gmail.com"
+        }
+    ],
+    "require": {
+        "php": "^7.2|^7.4|^8.0|^8.2",
+        "concept-labs/di": "^1",
+        "psr/http-message": "^1",
+        "psr/http-factory": "^1",
+        "fig/http-message-util": "^1"
+    },
+    "autoload": {
+        "psr-4": {
+            "Concept\\Http\\": "src/"
+        }
+    },
+    "require-dev": {
+    },
+    "autoload-dev": {
+    }
+
+}
