@@ -1,32 +1,26 @@
 <?php
 namespace Concept\Http\Message\Request;
 
-use Psr\Http\Message\StreamFactoryInterface;
+use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\UploadedFileFactoryInterface;
 use Psr\Http\Message\UploadedFileInterface;
+use InvalidArgumentException;
 
 class UploadedFileFactory implements UploadedFileFactoryInterface
 {
     /**
      * @var UploadedFileInterface|null
      */
-    protected ?UploadedFileInterface $uploadedFileInstance = null;
+    protected ?UploadedFileInterface $uploadedFilePrototype = null;
 
     /**
-     * @var StreamFactoryInterface|null
+     * Constructor to inject the prototype for uploaded files.
+     *
+     * @param UploadedFileInterface $uploadedFilePrototype
      */
-    protected ?StreamFactoryInterface $streamFactory = null;
-
-    /**
-     * @param UploadedFileInterface $uploadedFile
-     * @param StreamFactoryInterface $streamFactory
-     */
-    public function __construct(
-        UploadedFileInterface $uploadedFileInstance,
-        StreamFactoryInterface $streamFactory
-    ) {
-        $this->uploadedFileInstance = $uploadedFileInstance;
-        $this->streamFactory = $streamFactory;
+    public function __construct(UploadedFileInterface $uploadedFilePrototype)
+    {
+        $this->uploadedFilePrototype = $uploadedFilePrototype;
     }
 
     /**
@@ -34,28 +28,25 @@ class UploadedFileFactory implements UploadedFileFactoryInterface
      */
     public function createUploadedFile(
         StreamInterface $stream,
-        int $size = null,
-        int $error = \UPLOAD_ERR_OK,
-        string $clientFilename = null,
-        string $clientMediaType = null
+        ?int $size = null,
+        int $error = UPLOAD_ERR_OK,
+        ?string $clientFilename = null,
+        ?string $clientMediaType = null
     ): UploadedFileInterface {
-        $uploadedFile = $this->getUploadedFileInstance();
-        $uploadedFile->setStream($stream);
-        $uploadedFile->setSize($size);
-        $uploadedFile->setError($error);
-        $uploadedFile->setClientFilename($clientFilename);
-        $uploadedFile->setClientMediaType($clientMediaType);
+        $uploadedFile = clone $this->uploadedFilePrototype;
+
+        // Verify the type of the cloned object
+        if (!$uploadedFile instanceof UploadedFile) {
+            throw new InvalidArgumentException('Invalid prototype provided; must be an instance of \Concept\Http\Message\Request\UploadedFile for current version');
+        }
+
+        $uploadedFile = $uploadedFile
+            ->withStream($stream)
+            ->withSize($size ?? $stream->getSize())
+            ->withError($error)
+            ->withClientFilename($clientFilename)
+            ->withClientMediaType($clientMediaType);
 
         return $uploadedFile;
-    }
-
-    /**
-     * Get the injected uploaded file instance
-     * 
-     * @return UploadedFileInterface
-     */
-    protected function getUploadedFileInstance(): UploadedFileInterface
-    {
-        return $this->uploadedFileInstance;
     }
 }

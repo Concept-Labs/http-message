@@ -28,6 +28,15 @@
             },
             "Psr\\Http\\Message\\StreamFactoryInterface": {
                 "class": "Concept\\Http\\Message\\Stream\\StreamFactory"
+            },
+            "Psr\\Http\\Message\\UploadedFileInterface": {
+                "class": "Concept\\Http\\Message\\Request\\Files\\UploadedFile"
+            },
+            "Concept\\Http\\Message\\Request\\Files\\UploadedFileNormalizerInterface": {
+                "class": "Concept\\Http\\Message\\Request\\Files\\UploadedFileNormalizer"
+            },
+            "Concept\\Http\\Message\\Request\\Files\\UploadedFileFactoryInterface": {
+                "class": "Concept\\Http\\Message\\Request\\Files\\UploadedFileFactory"
             }
         }
     }

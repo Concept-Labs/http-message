@@ -3,7 +3,6 @@ namespace Concept\Http\Message\Uri;
 
 trait UriTrait
 {
-    
     public function setUri(string $uri): self
     {
         $this->uri = $uri;
@@ -26,10 +25,9 @@ trait UriTrait
         return $this;
     }
 
-
     protected function withUri(string $uri): self
     {
-        if (strcmp($uri, $this->__toString())) {
+        if (strcmp($uri, $this->__toString()) === 0) {
             return $this;
         }
         
@@ -49,15 +47,15 @@ trait UriTrait
         return $clone;
     }
 
-    protected function withComponet(int $component, $value): self
+    protected function withComponent(int $component, $value): self
     {
-        $components =$this->components;
+        $components = $this->components;
         $components[$component] = $value;
 
         return $this->withComponents($components);
     }
 
-    protected function getUriString()
+    protected function getUriString(): string
     {
         $url = [];
 
@@ -83,12 +81,11 @@ trait UriTrait
             $url[] = '?' . $this->getQuery();
         }
 
-        
         if (!empty($this->getFragment())) {
             $url[] = '#' . $this->getFragment();
         }
 
-        return join('', $url);
+        return implode('', $url);
     }
 
     /**
@@ -98,19 +95,8 @@ trait UriTrait
      * 
      * @return string|null The URI component
      */
-    protected function getComponent(int $component)
+    protected function getComponent(int $component): ?string
     {
-        if (!array_key_exists($component, $this->components)) {
-            return null;
-        }
-
-        $component = $this->components[$component]
-            ?? parse_url($this->uri, $component);
-        /**
-         * The component may be null from parse_url()
-         */    
-        //$component = $component ?? '';
-
-        return $component;
+        return $this->components[$component] ?? null;
     }
 }

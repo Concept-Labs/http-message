@@ -8,7 +8,9 @@ class Uri implements UriInterface
     use UriTrait;
     
     /**
-     * @var array<string, int> Schemes with default ports
+     * Schemes with default ports
+     * 
+     * @var array<string, int>
      */
     const SCHEMES = [
         'http' => 80,
@@ -23,27 +25,31 @@ class Uri implements UriInterface
     ];
     
     /**
-     * @var string The URI string
+     * The URI string
+     * 
+     * @var string
      */
     protected string $uri = '';
 
     /**
-     * @var array<int, string> The URI components
+     * The URI components
+     * 
+     * @var array<int, string>
      */
     protected array $components = [];
 
     /**
      * {@inheritDoc}
      */
-    public function getScheme()
+    public function getScheme(): string
     {
-        return $this->getComponent(PHP_URL_SCHEME);
+        return $this->getComponent(PHP_URL_SCHEME) ?? '';
     }
 
     /**
      * {@inheritDoc}
      */
-    public function getAuthority()
+    public function getAuthority(): string
     {
         $userInfo = $this->getUserInfo();
         $host = $this->getHost();
@@ -71,7 +77,7 @@ class Uri implements UriInterface
     /**
      * {@inheritDoc}
      */
-    public function getUserInfo()
+    public function getUserInfo(): string
     {
         $user = $this->getComponent(PHP_URL_USER);
         $password = $this->getComponent(PHP_URL_PASS);
@@ -88,16 +94,16 @@ class Uri implements UriInterface
     /**
      * {@inheritDoc}
      */
-    public function getHost()
+    public function getHost(): string
     {
-        return $this->getComponent(PHP_URL_HOST);
+        return $this->getComponent(PHP_URL_HOST) ?? '';
     }
 
     
     /**
      * {@inheritDoc}
      */
-    public function getPort()
+    public function getPort(): ?int
     {
         $scheme = $this->getScheme();
         $port = $this->getComponent(PHP_URL_PORT);
@@ -118,18 +124,15 @@ class Uri implements UriInterface
      * 
      * @return int|null The default port or null if not found
      */
-    public function getDefaultPort(string $scheme)
+    public function getDefaultPort(string $scheme): ?int
     {
-        
-        return array_key_exists($scheme, static::SCHEMES)
-            ? static::SCHEMES[$scheme] 
-            : null;
+        return static::SCHEMES[$scheme] ?? null;
     }
 
     /**
      * {@inheritDoc}
      */
-    public function getPath()
+    public function getPath(): string
     {
         return $this->getComponent(PHP_URL_PATH) ?? '';
     }
@@ -137,18 +140,17 @@ class Uri implements UriInterface
     /**
      * {@inheritDoc}
      */
-    public function getQuery()
+    public function getQuery(): string
     {
         $query = $this->getComponent(PHP_URL_QUERY);
 
         return !empty($query) ? rawurldecode($query) : '';
     }
 
-
     /**
      * {@inheritDoc}
      */
-    public function getFragment()
+    public function getFragment(): string
     {
         $fragment = $this->getComponent(PHP_URL_FRAGMENT);
     
@@ -158,80 +160,80 @@ class Uri implements UriInterface
     /**
      * {@inheritDoc}
      */
-    public function withScheme(string $scheme)
+    public function withScheme($scheme): UriInterface
     {
         if (!array_key_exists(strtolower($scheme), static::SCHEMES)) {
             throw new \InvalidArgumentException('Invalid or unsupported scheme');
         }
     
-        return $this->withComponet(PHP_URL_SCHEME, $scheme);
+        return $this->withComponent(PHP_URL_SCHEME, $scheme);
     }
 
     /**
      * {@inheritDoc}
      */
-    public function withUserInfo(string $user, ?string $password = null)
+    public function withUserInfo($user, $password = null): UriInterface
     {
-        return $this->withComponet(PHP_URL_USER, $user)
-            ->withComponet(PHP_URL_PASS, $password);
+        return $this->withComponent(PHP_URL_USER, $user)
+            ->withComponent(PHP_URL_PASS, $password);
     }
 
     /**
      * {@inheritDoc}
      */
-    public function withHost(string $host)
+    public function withHost($host): UriInterface
     {
         if (empty($host)) {
             throw new \InvalidArgumentException('Host cannot be empty');
         }
 
-        return $this->withComponet(PHP_URL_HOST, $host);
+        return $this->withComponent(PHP_URL_HOST, $host);
     }
 
     /**
      * {@inheritDoc}
      */
-    public function withPort(?int $port)
+    public function withPort($port): UriInterface
     {
         if ($port !== null && ($port < 1 || $port > 65535)) {
-            throw new \InvalidArgumentException(_('Invalid port number'));
+            throw new \InvalidArgumentException('Invalid port number');
         }
 
-        return $this->withComponet(PHP_URL_PORT, $port);
+        return $this->withComponent(PHP_URL_PORT, $port);
     }
 
     /**
      * {@inheritDoc}
      */
-    public function withPath(string $path)
+    public function withPath($path): UriInterface
     {
         if ($path !== '' && $path[0] !== '/' && strpos($path, '://') === false) {
             throw new \InvalidArgumentException('Invalid path: ' . $path);
         }
 
-        return $this->withComponet(PHP_URL_PATH, $path);
+        return $this->withComponent(PHP_URL_PATH, $path);
     }
 
     /**
      * {@inheritDoc}
      */
-    public function withQuery(string $query)
+    public function withQuery($query): UriInterface
     {
-        return $this->withComponet(PHP_URL_QUERY, $query);
+        return $this->withComponent(PHP_URL_QUERY, $query);
     }
 
     /**
      * {@inheritDoc}
      */
-    public function withFragment(string $fragment)
+    public function withFragment($fragment): UriInterface
     {
-        return $this->withComponet(PHP_URL_FRAGMENT, $fragment);
+        return $this->withComponent(PHP_URL_FRAGMENT, $fragment);
     }
 
     /**
      * {@inheritDoc}
      */
-    public function __toString()
+    public function __toString(): string
     {
         return $this->getUriString();
     }

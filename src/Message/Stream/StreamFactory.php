@@ -6,13 +6,16 @@ use Psr\Http\Message\StreamInterface;
 
 class StreamFactory implements StreamFactoryInterface
 {
-
     /**
      * @var StreamInterface|null
      */
     protected ?StreamInterface $streamInstance = null;
 
-
+    /**
+     * StreamFactory constructor.
+     *
+     * @param StreamInterface $streamInstance
+     */
     public function __construct(StreamInterface $streamInstance)
     {
         $this->streamInstance = $streamInstance;
@@ -25,6 +28,7 @@ class StreamFactory implements StreamFactoryInterface
     {
         $resource = fopen('php://temp', 'r+');
         fwrite($resource, $content);
+        rewind($resource);
 
         return $this->createStreamFromResource($resource);
     }
@@ -34,7 +38,12 @@ class StreamFactory implements StreamFactoryInterface
      */
     public function createStreamFromFile(string $filename, string $mode = 'r'): StreamInterface
     {
-        return $this->createStreamFromResource(fopen($filename, $mode));
+        $resource = fopen($filename, $mode);
+        if (!$resource) {
+            throw new \RuntimeException("Unable to open file: $filename");
+        }
+
+        return $this->createStreamFromResource($resource);
     }
 
     /**
@@ -42,21 +51,18 @@ class StreamFactory implements StreamFactoryInterface
      */
     public function createStreamFromResource($resource): StreamInterface
     {
-        /**
-         * @todo:vg setResource()? create interface? another way?
-         */
         $stream = $this->getStreamInstance();
         $stream->setResource($resource);
         return $stream;
     }
 
     /**
-     * Get the injected stream instance
+     * Get the injected stream instance.
      * 
      * @return StreamInterface
      */
     protected function getStreamInstance(): StreamInterface
     {
-        return $this->streamInstance ?? /** non container version */ new Stream();
+        return clone $this->streamInstance;
     }
 }

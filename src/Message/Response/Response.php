@@ -3,13 +3,32 @@ namespace Concept\Http\Message\Response;
 
 use Psr\Http\Message\ResponseInterface;
 use Concept\Http\Message\Message;
+use Concept\Http\Message\StatusReasonPhraseInterface;
+use Fig\Http\Message\StatusCodeInterface;
 
-class Response extends Message implements ResponseInterface
+/**
+ * Class Response
+ * @package Concept\Http\Message\Response
+ */
+class Response extends Message implements ResponseInterface, StatusCodeInterface
 {
-    protected $statusCode;
-    protected $reasonPhrase;
+    /**
+     * @var int
+     */
+    protected int $statusCode;
 
-    public function __construct($statusCode = 200, $reasonPhrase = '')
+    /**
+     * @var string
+     */
+    protected string $reasonPhrase;
+
+    /**
+     * Response constructor.
+     *
+     * @param int $statusCode
+     * @param string $reasonPhrase
+     */
+    public function __construct(int $statusCode = StatusCodeInterface::STATUS_OK, string $reasonPhrase = '')
     {
         $this->statusCode = $statusCode;
         $this->reasonPhrase = $reasonPhrase;
@@ -18,7 +37,7 @@ class Response extends Message implements ResponseInterface
     /**
      * {@inheritDoc}
      */
-    public function getStatusCode()
+    public function getStatusCode(): int
     {
         return $this->statusCode;
     }
@@ -26,11 +45,11 @@ class Response extends Message implements ResponseInterface
     /**
      * {@inheritDoc}
      */
-    public function withStatus($code, $reasonPhrase = '')
+    public function withStatus($code, $reasonPhrase = ''): ResponseInterface
     {
         $new = clone $this;
         $new->statusCode = $code;
-        $new->reasonPhrase = $reasonPhrase;
+        $new->reasonPhrase = $reasonPhrase ?: $this->getDefaultReasonPhrase($code);
 
         return $new;
     }
@@ -38,9 +57,20 @@ class Response extends Message implements ResponseInterface
     /**
      * {@inheritDoc}
      */
-    public function getReasonPhrase()
+    public function getReasonPhrase(): string
     {
         return $this->reasonPhrase;
     }
 
+    /**
+     * Get the reason phrase based on the status code.
+     * 
+     * @param int $statusCode
+     * 
+     * @return string
+     */
+    protected function getDefaultReasonPhrase(int $statusCode): string
+    {
+        return StatusReasonPhraseInterface::class[$statusCode] ?? '';
+    }
 }

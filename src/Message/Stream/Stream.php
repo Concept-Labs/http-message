@@ -21,12 +21,15 @@ class Stream implements StreamInterface
     protected ?int $size = null;
 
     /**
-     * @todo:vg Interface
+     * Встановлює ресурс потоку.
+     * 
+     * @param resource $resource
+     * @return StreamInterface
      */
     public function setResource($resource): StreamInterface
     {
         $this->resource = $resource;
-        $this->metadata = stream_get_meta_data($this->getResource());
+        $this->metadata = stream_get_meta_data($this->resource);
         $this->size = null;
 
         return $this;
@@ -45,11 +48,6 @@ class Stream implements StreamInterface
             $this->rewind();
             return $this->getContents();
         } catch (\Exception $e) {
-            /**
-             * @todo:vg: remove throw
-             * temporary throw for debugging
-             */
-            throw $e;
             return '';
         }
     }
@@ -59,8 +57,8 @@ class Stream implements StreamInterface
      */
     public function close()
     {
-        if (is_resource($this->getResource())) {
-            fclose($this->getResource());
+        if (is_resource($this->resource)) {
+            fclose($this->resource);
         }
     }
 
@@ -69,7 +67,7 @@ class Stream implements StreamInterface
      */
     public function detach()
     {
-        $resource = $this->getResource();
+        $resource = $this->resource;
         $this->resource = null;
         $this->size = null;
         $this->metadata = null;
@@ -86,21 +84,20 @@ class Stream implements StreamInterface
             return $this->size;
         }
 
-        if (!is_resource($this->getResource())) {
+        if (!is_resource($this->resource)) {
             return null;
         }
 
-        $stats = fstat($this->getResource());
+        $stats = fstat($this->resource);
         if ($stats === false) {
             return null;
         }
 
         if ($this->isSeekable()) {
             $this->size = $stats['size'];
-            return $this->size;
         }
 
-        return null;
+        return $this->size;
     }
 
     /**
@@ -108,11 +105,11 @@ class Stream implements StreamInterface
      */
     public function tell()
     {
-        if (!is_resource($this->getResource())) {
+        if (!is_resource($this->resource)) {
             throw new \RuntimeException('Stream is detached');
         }
 
-        $result = ftell($this->getResource());
+        $result = ftell($this->resource);
         if ($result === false) {
             throw new \RuntimeException('Unable to determine stream position');
         }
@@ -125,7 +122,7 @@ class Stream implements StreamInterface
      */
     public function eof()
     {
-        return !$this->getResource() || feof($this->getResource());
+        return !$this->resource || feof($this->resource);
     }
 
     /**
@@ -139,9 +136,9 @@ class Stream implements StreamInterface
     /**
      * {@inheritdoc}
      */
-    public function seek(int $offset, int $whence = SEEK_SET)
+    public function seek($offset, $whence = SEEK_SET)
     {
-        if (!is_resource($this->getResource())) {
+        if (!is_resource($this->resource)) {
             throw new \RuntimeException('Stream is detached');
         }
 
@@ -149,8 +146,8 @@ class Stream implements StreamInterface
             throw new \RuntimeException('Stream is not seekable');
         }
 
-        if (fseek($this->getResource(), $offset, $whence) === -1) {
-            throw new \RuntimeException('Unable to seek to stream position '.$offset.' with whence '.$whence);
+        if (fseek($this->resource, $offset, $whence) === -1) {
+            throw new \RuntimeException('Unable to seek to stream position ' . $offset . ' with whence ' . $whence);
         }
     }
 
@@ -167,23 +164,15 @@ class Stream implements StreamInterface
      */
     public function isWritable()
     {
-        /**
-         * @todo:vg: review
-         */
-        return preg_match('/w|a|x|c/', $this->getMetaData('mode'));
-        //return in_array($this->getMetaData('mode'), ['w', 'w+', 'a', 'a+', 'r+', 'x+', 'c+']);
+        return preg_match('/[waxc]/i', $this->getMetadata('mode'));
     }
 
     /**
      * {@inheritdoc}
      */
     public function isReadable(): bool
-    {   
-        /**
-         * @todo:vg: review
-         */
-        return preg_match('/r|\+/', $this->getMetaData('mode'));
-        //return in_array($this->getMetaData('mode'), ['r', 'r+', 'w+', 'a+', 'x+', 'c+']);
+    {
+        return preg_match('/[r+]/i', $this->getMetadata('mode'));
     }
 
     /**
@@ -191,7 +180,7 @@ class Stream implements StreamInterface
      */
     public function write($string)
     {
-        if (!is_resource($this->getResource())) {
+        if (!is_resource($this->resource)) {
             throw new \RuntimeException('Stream is detached');
         }
 
@@ -199,7 +188,7 @@ class Stream implements StreamInterface
             throw new \RuntimeException('Cannot write to a non-writable stream');
         }
 
-        $result = fwrite($this->getResource(), $string);
+        $result = fwrite($this->resource, $string);
         if ($result === false) {
             throw new \RuntimeException('Unable to write to stream');
         }
@@ -213,7 +202,7 @@ class Stream implements StreamInterface
      */
     public function read($length)
     {
-        if (!is_resource($this->getResource())) {
+        if (!is_resource($this->resource)) {
             throw new \RuntimeException('Stream is detached');
         }
 
@@ -221,7 +210,7 @@ class Stream implements StreamInterface
             throw new \RuntimeException('Cannot read from non-readable stream');
         }
 
-        $result = fread($this->getResource(), $length);
+        $result = fread($this->resource, $length);
         if ($result === false) {
             throw new \RuntimeException('Unable to read from stream');
         }
@@ -234,11 +223,11 @@ class Stream implements StreamInterface
      */
     public function getContents()
     {
-        if (!is_resource($this->getResource())) {
+        if (!is_resource($this->resource)) {
             throw new \RuntimeException('Stream is detached');
         }
 
-        $contents = stream_get_contents($this->getResource());
+        $contents = stream_get_contents($this->resource);
         if ($contents === false) {
             throw new \RuntimeException('Unable to read stream contents');
         }
@@ -259,11 +248,12 @@ class Stream implements StreamInterface
     }
 
     /**
-     * @return resource
+     * Get the resource.
+     * 
+     * @return resource|null
      */
     protected function getResource()
     {
         return $this->resource;
     }
-
 }

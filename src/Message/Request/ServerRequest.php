@@ -3,36 +3,42 @@ namespace Concept\Http\Message\Request;
 
 use Psr\Http\Message\ServerRequestInterface;
 
+/**
+ * Class ServerRequest
+ * @package Concept\Http\Message\Request
+ */
 class ServerRequest extends Request implements ServerRequestInterface
 {
-
     /**
      * @var array
      */
     protected array $serverParams = [];
+
     /**
      * @var array
      */
     protected array $cookieParams = [];
+
     /**
      * @var array
      */
     protected array $queryParams = [];
+
     /**
      * @var array
      */
     protected array $uploadedFiles = [];
+
     /**
-     * @var array
+     * @var array|null|object
      */
-    protected array $parsedBody = [];
+    protected $parsedBody = null;
+
     /**
      * @var array
      */
     protected array $attributes = [];
-    
 
-    
     /**
      * {@inheritDoc}
      */
@@ -65,7 +71,6 @@ class ServerRequest extends Request implements ServerRequestInterface
      */
     public function getQueryParams(): array
     {
-        
         return $this->queryParams;
     }
 
