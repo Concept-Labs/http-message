@@ -26,9 +26,9 @@ class ResponseFactory implements ResponseFactoryInterface
      * ResponseFactory constructor.
      *
      * @param ResponseInterface $responseInstance
-     * @param StreamFactoryInterface|null $streamFactory
+     * @param StreamFactoryInterface $streamFactory
      */
-    public function __construct(ResponseInterface $responseInstance, ?StreamFactoryInterface $streamFactory = null)
+    public function __construct(ResponseInterface $responseInstance, ?StreamFactoryInterface $streamFactory)
     {
         $this->responseInstance = $responseInstance;
         $this->streamFactory = $streamFactory;
