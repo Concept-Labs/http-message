@@ -56,6 +56,7 @@ class UriFactory implements UriFactoryInterface
      */
     protected function getComponent(string $uri, int $component): ?string
     {
-        return parse_url($uri, $component);
+        $componentValue = parse_url($uri, $component);
+        return $componentValue === false ? null : $componentValue;
     }
 }
