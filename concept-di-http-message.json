@@ -1,6 +1,6 @@
 {
     "di": {
-        "dependency": {
+        "dependencies": {
             "concept-labs/http-message": {
                 "preference": {
                     "Psr\\Http\\Message\\UriInterface": {
