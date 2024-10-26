@@ -11,7 +11,7 @@ use Concept\Http\Message\Request\Files\UploadedFileNormalizer;
 
 class ServerRequestFactory implements ServerRequestFactoryInterface
 {
-    protected ?ServerRequestInterface $serverRequestInstance = null;
+    protected ?ServerRequestInterface $serverRequestPrototype = null;
     protected ?UriFactoryInterface $uriFactory = null;
     protected ?StreamFactoryInterface $streamFactory = null;
     protected ?UploadedFileNormalizer $uploadedFileNormalizer = null;
@@ -20,12 +20,12 @@ class ServerRequestFactory implements ServerRequestFactoryInterface
      * Dependency injection constructor.
      */
     public function __construct(
-        ServerRequestInterface $serverRequestInstance, 
+        ServerRequestInterface $serverRequestPrototype, 
         UriFactoryInterface $uriFactory,
         StreamFactoryInterface $streamFactory,
         UploadedFileNormalizer $uploadedFileNormalizer
     ) {
-        $this->serverRequestInstance = $serverRequestInstance;
+        $this->serverRequestPrototype = $serverRequestPrototype;
         $this->uriFactory = $uriFactory;
         $this->streamFactory = $streamFactory;
         $this->uploadedFileNormalizer = $uploadedFileNormalizer;
@@ -34,26 +34,28 @@ class ServerRequestFactory implements ServerRequestFactoryInterface
     /**
      * {@inheritDoc}
      */
-    public function createServerRequest(string $method, $uri, array $serverParams = []): ServerRequestInterface
-    {
-        /**
-         * Create a URI instance.
-         */
+    public function createServerRequest(
+        string $method,
+        $uri,
+        array $serverParams = [], 
+        ?array $headers = [], // Додано заголовки як параметр
+        ?array $queryParams = [], 
+        ?array $cookieParams = [], 
+        ?array $uploadedFiles = [], 
+        ?array $parsedBody = []
+    ): ServerRequestInterface {
         $uri = $this->createUri($uri);
 
-        /**
-         * Create a server request instance.
-         */
-        $serverRequest = $this->getServerRequestInstance()
+        $serverRequest = $this->getServerRequestPrototype()
             ->withMethod($method)
             ->withUri($uri)
-            ->withQueryParams($_GET)
-            ->withCookieParams($_COOKIE)
-            ->withUploadedFiles($this->uploadedFileNormalizer->normalizeFiles($_FILES))
+            ->withQueryParams($queryParams)
+            ->withCookieParams($cookieParams)
+            ->withUploadedFiles($this->uploadedFileNormalizer->normalizeFiles($uploadedFiles))
             ->withBody($this->createRequestBody())
-            ->withParsedBody($_POST);
+            ->withParsedBody($parsedBody);
 
-        foreach (getallheaders() as $name => $value) {
+        foreach ($headers as $name => $value) {
             $serverRequest = $serverRequest->withAddedHeader($name, $value);
         }
 
@@ -84,9 +86,9 @@ class ServerRequestFactory implements ServerRequestFactoryInterface
      * 
      * @return ServerRequestInterface
      */
-    protected function getServerRequestInstance(): ServerRequestInterface
+    protected function getServerRequestPrototype(): ServerRequestInterface
     {
-        return clone $this->serverRequestInstance;
+        return clone $this->serverRequestPrototype;
     }
 
     /**
@@ -96,6 +98,32 @@ class ServerRequestFactory implements ServerRequestFactoryInterface
      */
     protected function createRequestBody(): StreamInterface
     {
-        return $this->streamFactory->createStreamFromResource(fopen('php://input', 'r+'));
+        return $this
+            ->getStreamFactory()
+                ->createStreamFromResource(
+                    $this->getStreamResource()
+                );
+    }
+
+    /**
+     * Get the Stream factory.
+     * 
+     * @return StreamFactoryInterface
+     */
+    protected function getStreamFactory(): StreamFactoryInterface
+    {
+        return $this->streamFactory;
+    }
+
+    /**
+     * Get the stream resource.
+     * Default to php://input
+     * @todo Implement a better way to get the stream resource.
+     * 
+     * @return resource
+     */
+    protected function getStreamResource()
+    {
+        return fopen('php://input', 'r+');
     }
 }

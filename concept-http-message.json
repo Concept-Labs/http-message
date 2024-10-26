@@ -1,6 +1,6 @@
 {
     "di": {
-        "dependencies": {
+        "module": {
             "concept-labs/http-message": {
                 "preference": {
                     "Psr\\Http\\Message\\UriInterface": {
@@ -21,7 +21,7 @@
                         "class": "Concept\\Http\\Message\\Request\\ServerRequest"
                     },
                     "Psr\\Http\\Message\\ServerRequestFactoryInterface": {
-                        "class": "Concept\\Http\\Message\\Request\\ServerRequestFactory",
+                        "class": "Concept\\Http\\Message\\Request\\ServerRequestGlobalsFactory",
                         "singleton": true
                     },
                     "Psr\\Http\\Message\\ResponseInterface": {
