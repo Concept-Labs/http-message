@@ -15,43 +15,28 @@ class ResponseFactory implements ResponseFactoryInterface
     /**
      * @var ResponseInterface
      */
-    protected ResponseInterface $responseInstance;
-
-    /**
-     * @var StreamFactoryInterface|null
-     */
-    protected ?StreamFactoryInterface $streamFactory;
+    protected ?ResponseInterface $responsePrototype = null;
+    protected ?StreamFactoryInterface $streamFactry = null;
 
     /**
      * ResponseFactory constructor.
      *
-     * @param ResponseInterface $responseInstance
-     * @param StreamFactoryInterface $streamFactory
+     * @param ResponseInterface $responsePrototype
      */
-    public function __construct(ResponseInterface $responseInstance, ?StreamFactoryInterface $streamFactory)
+    public function __construct(ResponseInterface $responsePrototype, StreamFactoryInterface $streamFactry)
     {
-        $this->responseInstance = $responseInstance;
-        $this->streamFactory = $streamFactory;
+        $this->responsePrototype = $responsePrototype;
+        $this->streamFactry = $streamFactry;
     }
 
     /**
-     * Get a cloned instance of the response.
+     * Get a cloned instance of the response prototype.
      *
      * @return ResponseInterface
      */
-    protected function getResponseInstance(): ResponseInterface
+    protected function getResponsePrototype(): ResponseInterface
     {
-        return clone $this->responseInstance;
-    }
-
-    /**
-     * Get a cloned instance of the stream factory.
-     *
-     * @return StreamFactoryInterface|null
-     */
-    protected function getStreamFactoryInstance(): ?StreamFactoryInterface
-    {
-        return $this->streamFactory !== null ? clone $this->streamFactory : null;
+        return clone $this->responsePrototype;
     }
 
     /**
@@ -59,14 +44,20 @@ class ResponseFactory implements ResponseFactoryInterface
      */
     public function createResponse(int $code = StatusCodeInterface::STATUS_OK, string $reasonPhrase = ''): ResponseInterface
     {
-        $response = $this->getResponseInstance()
-            ->withStatus($code, $reasonPhrase);
-        
-        if ($this->streamFactory !== null) {
-            $body = $this->getStreamFactoryInstance()->createStream();
-            $response = $response->withBody($body);
-        }
+        $response = $this->getResponsePrototype()
+            ->withStatus($code, $reasonPhrase)
+            ->withBody($this->getStreamPrototype()->createStream());
 
         return $response;
     }
+
+    /**
+     * @return StreamFactoryInterface
+     */
+    protected function getStreamPrototype(): StreamFactoryInterface
+    {
+        return $this->streamFactry;
+    }
+
+    
 }
