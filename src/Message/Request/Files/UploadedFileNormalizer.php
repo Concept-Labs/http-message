@@ -5,7 +5,7 @@ use Psr\Http\Message\UploadedFileInterface;
 use Psr\Http\Message\UploadedFileFactoryInterface;
 use Psr\Http\Message\StreamFactoryInterface;
 
-class UploadedFileNormalizer
+class UploadedFileNormalizer implements UploadedFileNormalizerInterface
 {
     protected UploadedFileFactoryInterface $uploadedFileFactory;
     protected StreamFactoryInterface $streamFactory;

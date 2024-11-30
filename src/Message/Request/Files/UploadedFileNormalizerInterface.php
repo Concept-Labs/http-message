@@ -1,7 +1,7 @@
 <?php
 namespace Concept\Http\Message\Request\Files;
 
-interface UploadedFileNormalizer
+interface UploadedFileNormalizerInterface
 {
     /**
      * Normalize the files array.

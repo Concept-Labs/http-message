@@ -1,6 +1,6 @@
 {
     "di": {
-        "module": {
+        "package": {
             "concept-labs/http-message": {
                 "preference": {
                     "Psr\\Http\\Message\\UriInterface": {

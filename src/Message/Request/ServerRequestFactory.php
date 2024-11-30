@@ -8,13 +8,14 @@ use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\UriFactoryInterface;
 use Psr\Http\Message\UriInterface;
 use Concept\Http\Message\Request\Files\UploadedFileNormalizer;
+use Concept\Http\Message\Request\Files\UploadedFileNormalizerInterface;
 
 class ServerRequestFactory implements ServerRequestFactoryInterface
 {
     protected ?ServerRequestInterface $serverRequestPrototype = null;
     protected ?UriFactoryInterface $uriFactory = null;
     protected ?StreamFactoryInterface $streamFactory = null;
-    protected ?UploadedFileNormalizer $uploadedFileNormalizer = null;
+    protected ?UploadedFileNormalizerInterface $uploadedFileNormalizer = null;
 
     /**
      * Dependency injection constructor.
@@ -23,7 +24,7 @@ class ServerRequestFactory implements ServerRequestFactoryInterface
         ServerRequestInterface $serverRequestPrototype, 
         UriFactoryInterface $uriFactory,
         StreamFactoryInterface $streamFactory,
-        UploadedFileNormalizer $uploadedFileNormalizer
+        UploadedFileNormalizerInterface $uploadedFileNormalizer
     ) {
         $this->serverRequestPrototype = $serverRequestPrototype;
         $this->uriFactory = $uriFactory;
