@@ -24,6 +24,13 @@
     "require-dev": {
     },
     "autoload-dev": {
+    },
+    "extra": {
+        "concept": {
+            "include": [
+                "concept.json"
+            ]
+        }
     }
 
 }
