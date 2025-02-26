@@ -1,6 +1,7 @@
 <?php 
 namespace Concept\Http\Message\Response;
 
+use Concept\Singularity\Contract\Lifecycle\SharedInterface;
 use Fig\Http\Message\StatusCodeInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -10,7 +11,7 @@ use Psr\Http\Message\StreamFactoryInterface;
  * Class ResponseFactory
  * @package Concept\Http\Message\Response
  */
-class ResponseFactory implements ResponseFactoryInterface
+class ResponseFactory implements ResponseFactoryInterface, SharedInterface
 {
     /**
      * @var ResponseInterface

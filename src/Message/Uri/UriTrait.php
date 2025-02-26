@@ -3,7 +3,7 @@ namespace Concept\Http\Message\Uri;
 
 trait UriTrait
 {
-    public function setUri(string $uri): self
+    public function setUri(string $uri): static
     {
         $this->uri = $uri;
         $this->parseUri($uri);
@@ -18,14 +18,14 @@ trait UriTrait
      * 
      * @return static
      */
-    protected function parseUri(string $uri): self
+    protected function parseUri(string $uri): static
     {
         $this->components = parse_url($uri);
 
         return $this;
     }
 
-    protected function withUri(string $uri): self
+    protected function withUri(string $uri): static
     {
         if (strcmp($uri, $this->__toString()) === 0) {
             return $this;
@@ -38,7 +38,7 @@ trait UriTrait
         return $clone;
     }
 
-    protected function withComponents(array $components): self
+    protected function withComponents(array $components): static
     {
         $clone = clone $this;
         
@@ -47,7 +47,7 @@ trait UriTrait
         return $clone;
     }
 
-    protected function withComponent(int $component, $value): self
+    protected function withComponent(int $component, $value): static
     {
         $components = $this->components;
         $components[$component] = $value;

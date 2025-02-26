@@ -92,9 +92,9 @@ class UploadedFile implements UploadedFileInterface
      * Create a new instance with the specified stream
      *
      * @param StreamInterface $stream
-     * @return self
+     * @return static
      */
-    public function withStream(StreamInterface $stream): self
+    public function withStream(StreamInterface $stream): static
     {
         $new = clone $this;
         $new->stream = $stream;
@@ -105,9 +105,9 @@ class UploadedFile implements UploadedFileInterface
      * Create a new instance with the specified size
      *
      * @param int $size
-     * @return self
+     * @return static
      */
-    public function withSize(int $size): self
+    public function withSize(int $size): static
     {
         $new = clone $this;
         $new->size = $size;
@@ -118,9 +118,9 @@ class UploadedFile implements UploadedFileInterface
      * Create a new instance with the specified error code
      *
      * @param int $error
-     * @return self
+     * @return static
      */
-    public function withError(int $error): self
+    public function withError(int $error): static
     {
         $new = clone $this;
         $new->error = $error;
@@ -131,9 +131,9 @@ class UploadedFile implements UploadedFileInterface
      * Create a new instance with the specified client filename
      *
      * @param string $clientFilename
-     * @return self
+     * @return static
      */
-    public function withClientFilename(?string $clientFilename): self
+    public function withClientFilename(?string $clientFilename): static
     {
         $new = clone $this;
         $new->clientFilename = $clientFilename;
@@ -144,9 +144,9 @@ class UploadedFile implements UploadedFileInterface
      * Create a new instance with the specified client media type
      *
      * @param string $clientMediaType
-     * @return self
+     * @return static
      */
-    public function withClientMediaType(?string $clientMediaType): self
+    public function withClientMediaType(?string $clientMediaType): static
     {
         $new = clone $this;
         $new->clientMediaType = $clientMediaType;

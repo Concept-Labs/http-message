@@ -1,10 +1,12 @@
 <?php
 namespace Concept\Http\Message\Stream;
 
+use Concept\Singularity\Contract\Lifecycle\SharedInterface;
 use Psr\Http\Message\StreamFactoryInterface;
 use Psr\Http\Message\StreamInterface;
 
-class StreamFactory implements StreamFactoryInterface
+
+class StreamFactory implements StreamFactoryInterface, SharedInterface
 {
     /**
      * @var StreamInterface|null

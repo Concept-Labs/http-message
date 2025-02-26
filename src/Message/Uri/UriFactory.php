@@ -9,16 +9,16 @@ class UriFactory implements UriFactoryInterface
     /**
      * @var UriInterface The Uri instance
      */
-    protected ?UriInterface $uriInstance = null;
+    protected ?UriInterface $uriPrototype = null;
 
     /**
      * The constructor
      *
-     * @param UriInterface $uriInstance The uri instance
+     * @param UriInterface $uriPrototype The uri instance
      */
-    public function __construct(UriInterface $uriInstance)
+    public function __construct(UriInterface $uriPrototype)
     {
-        $this->uriInstance = $uriInstance;
+        $this->uriPrototype = $uriPrototype;
     }
 
     /**
@@ -26,7 +26,7 @@ class UriFactory implements UriFactoryInterface
      */
     public function createUri(string $uri = ''): UriInterface
     {
-        return $this->getUriInstance()
+        return $this->getUriPrototype()
             ->withScheme($this->getComponent($uri, PHP_URL_SCHEME) ?? '')
             ->withUserInfo($this->getComponent($uri, PHP_URL_USER) ?? '', $this->getComponent($uri, PHP_URL_PASS) ?? '')
             ->withHost($this->getComponent($uri, PHP_URL_HOST) ?? '')
@@ -41,9 +41,9 @@ class UriFactory implements UriFactoryInterface
      * 
      * @return UriInterface
      */
-    protected function getUriInstance(): UriInterface
+    protected function getUriPrototype(): UriInterface
     {
-        return clone $this->uriInstance;
+        return clone $this->uriPrototype;
     }
 
     /**

@@ -5,13 +5,12 @@
     "license": "MIT",
     "authors": [
         {
-            "name": "Mtr",
-            "email": "info.concept.labs@gmail.com"
+            "name": "Viktor Halytskyi",
+            "email": "concdept.galitsky@gmail.com"
         }
     ],
     "require": {
-        "php": "^7.2|^7.4|^8.0|^8.2",
-        "concept-labs/di": "^1",
+        "php": ">=8.2",
         "psr/http-message": "^1",
         "psr/http-factory": "^1",
         "fig/http-message-util": "^1"
