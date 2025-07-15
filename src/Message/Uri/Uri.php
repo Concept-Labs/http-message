@@ -1,14 +1,12 @@
 <?php
 namespace Concept\Http\Message\Uri;
 
-use Concept\Prototype\PrototypableInterface;
-use Concept\Prototype\PrototypableTrait;
+use Concept\Singularity\Contract\Lifecycle\PrototypeInterface;
 use Psr\Http\Message\UriInterface;
 
-class Uri implements UriInterface, PrototypableInterface
+class Uri implements UriInterface, PrototypeInterface
 {
     use UriTrait;
-    use PrototypableTrait;
     
     /**
      * Schemes with default ports
@@ -45,6 +43,11 @@ class Uri implements UriInterface, PrototypableInterface
     {
         $this->uri = '';
         $this->components = [];
+    }
+
+    public function prototype(): static
+    {
+        return clone $this;
     }
 
     /**
