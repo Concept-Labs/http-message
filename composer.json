@@ -26,9 +26,7 @@
     },
     "extra": {
         "concept": {
-            "include": [
-                "concept.json"
-            ]
+            
         }
     }
 

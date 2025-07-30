@@ -7,7 +7,6 @@ use Psr\Http\Message\StreamFactoryInterface;
 use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\UriFactoryInterface;
 use Psr\Http\Message\UriInterface;
-use Concept\Http\Message\Request\Files\UploadedFileNormalizer;
 use Concept\Http\Message\Request\Files\UploadedFileNormalizerInterface;
 
 class ServerRequestFactory implements ServerRequestFactoryInterface

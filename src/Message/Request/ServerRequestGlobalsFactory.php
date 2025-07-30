@@ -1,7 +1,6 @@
 <?php
 namespace Concept\Http\Message\Request;
 
-use Psr\Http\Message\ServerRequestFactoryInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
 class ServerRequestGlobalsFactory extends ServerRequestFactory

@@ -8,19 +8,16 @@ use Psr\Http\Message\StreamInterface;
 
 class StreamFactory implements StreamFactoryInterface, SharedInterface
 {
-    /**
-     * @var StreamInterface|null
-     */
-    protected ?StreamInterface $streamInstance = null;
+
+    const STREAM_TYPE = 'php://temp';
 
     /**
      * StreamFactory constructor.
      *
      * @param StreamInterface $streamInstance
      */
-    public function __construct(StreamInterface $streamInstance)
+    public function __construct(private StreamInterface $streamInstance)
     {
-        $this->streamInstance = $streamInstance;
     }
 
     /**
@@ -28,7 +25,7 @@ class StreamFactory implements StreamFactoryInterface, SharedInterface
      */
     public function createStream(string $content = ''): StreamInterface
     {
-        $resource = fopen('php://temp', 'r+');
+        $resource = fopen(self::STREAM_TYPE, 'r+');
         fwrite($resource, $content);
         rewind($resource);
 
