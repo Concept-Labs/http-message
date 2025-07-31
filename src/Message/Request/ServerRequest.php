@@ -12,7 +12,7 @@ class ServerRequest extends Request implements ServerRequestInterface
     /**
      * @var array
      */
-    protected array $serverParams = [];
+    protected ?array $serverParams = [];
 
     /**
      * @var array
@@ -39,12 +39,21 @@ class ServerRequest extends Request implements ServerRequestInterface
      */
     protected array $attributes = [];
 
+    public function __construct()
+    {
+        $this->serverParams = $_SERVER;
+        // $this->cookieParams = $_COOKIE;
+        // $this->queryParams = $_GET;
+        // $this->uploadedFiles = $_FILES;
+        // $this->parsedBody = $_POST;
+    }
+
     /**
      * {@inheritDoc}
      */
     public function getServerParams(): array
     {
-        return $this->serverParams;
+        return $this->serverParams ?? $_SERVER;
     }
 
     /**

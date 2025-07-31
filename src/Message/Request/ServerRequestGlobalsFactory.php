@@ -13,11 +13,11 @@ class ServerRequestGlobalsFactory extends ServerRequestFactory
         string $method,
         $uri, 
         array $serverParams = [],
-        ?array $headers = [], // Додано заголовки як параметр
-        ?array $queryParams = [], 
-        ?array $cookieParams = [], 
-        ?array $uploadedFiles = [], 
-        ?array $parsedBody = []
+        ?array $headers = null, 
+        ?array $queryParams = null, 
+        ?array $cookieParams = null, 
+        ?array $uploadedFiles = null, 
+        ?array $parsedBody = null
     ): ServerRequestInterface
     {
         $headers = $headers ?? getallheaders();
@@ -38,5 +38,6 @@ class ServerRequestGlobalsFactory extends ServerRequestFactory
             $parsedBody
         );
     }
+
 
 }
