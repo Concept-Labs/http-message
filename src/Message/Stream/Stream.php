@@ -189,6 +189,7 @@ class Stream implements StreamInterface
         }
 
         $result = fwrite($this->resource, $string);
+
         if ($result === false) {
             throw new \RuntimeException('Unable to write to stream');
         }

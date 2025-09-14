@@ -62,9 +62,9 @@ class ServerRequestFactory implements ServerRequestFactoryInterface
         /**
          * Add server attributes to the server request.
          */
-        foreach (ServerRequestAttributesInterface::SERVER_ATTRIBUTES_TO_ADD as $key => $value) {
-            $serverRequest = $serverRequest->withAttribute($key, $value);
-        }
+        // foreach (ServerRequestAttributesInterface::SERVER_ATTRIBUTES_TO_ADD as $key => $value) {
+        //     $serverRequest = $serverRequest->withAttribute($key, $value);
+        // }
 
         return $serverRequest;
     }

@@ -11,6 +11,7 @@ class Message implements MessageInterface
     protected array $headers = [];
     protected string $protocol = '1.1';
 
+
     /**
      * {@inheritDoc}
      */
