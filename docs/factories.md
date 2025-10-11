@@ -266,31 +266,6 @@ $serverRequestGlobalsFactory = new ServerRequestGlobalsFactory(
 );
 ```
 
-### Service Container Integration
-
-```php
-// With Singularity Container (or any PSR-11 container)
-$container->set(StreamFactoryInterface::class, function() {
-    return new StreamFactory(new Stream());
-});
-
-$container->set(UriFactoryInterface::class, function() {
-    return new UriFactory(new Uri());
-});
-
-$container->set(RequestFactoryInterface::class, function($c) {
-    return new RequestFactory(
-        $c->get(UriFactoryInterface::class),
-        $c->get(StreamFactoryInterface::class),
-        new Request()
-    );
-});
-
-// Use factories
-$requestFactory = $container->get(RequestFactoryInterface::class);
-$request = $requestFactory->createRequest('GET', '/api/users');
-```
-
 ## Prototype Pattern
 
 Factories use prototypes to create new instances efficiently:
