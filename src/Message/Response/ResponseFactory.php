@@ -13,21 +13,15 @@ use Psr\Http\Message\StreamFactoryInterface;
  */
 class ResponseFactory implements ResponseFactoryInterface, SharedInterface
 {
-    /**
-     * @var ResponseInterface
-     */
-    protected ?ResponseInterface $responsePrototype = null;
-    protected ?StreamFactoryInterface $streamFactry = null;
 
     /**
      * ResponseFactory constructor.
      *
      * @param ResponseInterface $responsePrototype
+     * @param StreamFactoryInterface $streamFactory
      */
-    public function __construct(ResponseInterface $responsePrototype, StreamFactoryInterface $streamFactry)
+    public function __construct(private ResponseInterface $responsePrototype, private StreamFactoryInterface $streamFactory)
     {
-        $this->responsePrototype = $responsePrototype;
-        $this->streamFactry = $streamFactry;
     }
 
     /**
@@ -47,7 +41,7 @@ class ResponseFactory implements ResponseFactoryInterface, SharedInterface
     {
         $response = $this->getResponsePrototype()
             ->withStatus($code, $reasonPhrase)
-            ->withBody($this->getStreamPrototype()->createStream());
+            ->withBody($this->getStreamFactory()->createStream());
 
         return $response;
     }
@@ -55,9 +49,9 @@ class ResponseFactory implements ResponseFactoryInterface, SharedInterface
     /**
      * @return StreamFactoryInterface
      */
-    protected function getStreamPrototype(): StreamFactoryInterface
+    protected function getStreamFactory(): StreamFactoryInterface
     {
-        return $this->streamFactry;
+        return $this->streamFactory;
     }
 
     
