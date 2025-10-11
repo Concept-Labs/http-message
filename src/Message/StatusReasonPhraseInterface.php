@@ -1,6 +1,8 @@
 <?php
 namespace Concept\Http\Message;
 
+use Fig\Http\Message\StatusCodeInterface;
+
 interface StatusReasonPhraseInterface
 {
     const PHRASES = [
@@ -44,6 +46,6 @@ interface StatusReasonPhraseInterface
         StatusCodeInterface::STATUS_BAD_GATEWAY => 'Bad Gateway',
         StatusCodeInterface::STATUS_SERVICE_UNAVAILABLE => 'Service Unavailable',
         StatusCodeInterface::STATUS_GATEWAY_TIMEOUT => 'Gateway Timeout',
-        StatusCodeInterface::STATUS_HTTP_VERSION_NOT_SUPPORTED => 'HTTP Version Not Supported',
-    ]
+        StatusCodeInterface::STATUS_VERSION_NOT_SUPPORTED => 'HTTP Version Not Supported',
+    ];
 }

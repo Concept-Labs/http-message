@@ -71,6 +71,6 @@ class Response extends Message implements ResponseInterface, StatusCodeInterface
      */
     protected function getDefaultReasonPhrase(int $statusCode): string
     {
-        return StatusReasonPhraseInterface::class[$statusCode] ?? '';
+        return StatusReasonPhraseInterface::PHRASES[$statusCode] ?? '';
     }
 }

@@ -17,7 +17,8 @@
     },
     "autoload": {
         "psr-4": {
-            "Concept\\Http\\": "src/"
+            "Concept\\Http\\": "src/",
+            "Concept\\Singularity\\": "src/Singularity/"
         }
     },
     "require-dev": {

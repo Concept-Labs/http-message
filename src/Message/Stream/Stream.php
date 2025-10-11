@@ -21,7 +21,7 @@ class Stream implements StreamInterface
     protected ?int $size = null;
 
     /**
-     * Встановлює ресурс потоку.
+     * Set the stream resource.
      * 
      * @param resource $resource
      * @return StreamInterface

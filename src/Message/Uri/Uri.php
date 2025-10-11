@@ -45,6 +45,11 @@ class Uri implements UriInterface, PrototypeInterface
         $this->components = [];
     }
 
+    /**
+     * Create a new prototype instance
+     * 
+     * @return static
+     */
     public function prototype(): static
     {
         return clone $this;
@@ -174,7 +179,9 @@ class Uri implements UriInterface, PrototypeInterface
      */
     public function withScheme($scheme): UriInterface
     {
-        if (!array_key_exists(strtolower($scheme), static::SCHEMES)) {
+        $scheme = strtolower($scheme);
+        
+        if ($scheme !== '' && !array_key_exists($scheme, static::SCHEMES)) {
             throw new \InvalidArgumentException('Invalid or unsupported scheme');
         }
     
@@ -195,11 +202,7 @@ class Uri implements UriInterface, PrototypeInterface
      */
     public function withHost($host): UriInterface
     {
-        if (empty($host)) {
-            throw new \InvalidArgumentException('Host cannot be empty');
-        }
-
-        return $this->withComponent(PHP_URL_HOST, $host);
+        return $this->withComponent(PHP_URL_HOST, strtolower($host));
     }
 
     /**
@@ -219,10 +222,10 @@ class Uri implements UriInterface, PrototypeInterface
      */
     public function withPath($path): UriInterface
     {
-        if ($path !== '' && $path[0] !== '/' && strpos($path, '://') === false) {
-            throw new \InvalidArgumentException('Invalid path: ' . $path);
+        if (!is_string($path)) {
+            throw new \InvalidArgumentException('Path must be a string');
         }
-
+        
         return $this->withComponent(PHP_URL_PATH, $path);
     }
 
