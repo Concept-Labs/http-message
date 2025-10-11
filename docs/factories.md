@@ -195,7 +195,7 @@ echo $uri->getFragment(); // 'fragment'
 Factories use constructor injection for dependencies:
 
 ```php
-class MyApplication
+class MyApplication implements \Psr\Http\Server\RequestHandlerInterface
 {
     public function __construct(
         private RequestFactoryInterface $requestFactory,
@@ -203,10 +203,8 @@ class MyApplication
         private StreamFactoryInterface $streamFactory
     ) {}
 
-    public function handleRequest(): ResponseInterface
+    public function handle(ServerRequestInterface $request): \Psr\Http\Message\ResponseInterface
     {
-        $request = $this->requestFactory->createRequest('GET', '/api/users');
-        
         // Process request...
         
         $body = $this->streamFactory->createStream(
