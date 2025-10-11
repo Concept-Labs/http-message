@@ -22,13 +22,25 @@
         }
     },
     "require-dev": {
+        "pestphp/pest": "^2.0",
+        "mockery/mockery": "^1.6"
     },
     "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
     },
     "extra": {
         "concept": {
             
         }
+    },
+    "config": {
+        "allow-plugins": {
+            "pestphp/pest-plugin": true
+        }
+    },
+    "scripts": {
+        "test": "pest"
     }
-
 }

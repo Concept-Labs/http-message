@@ -125,13 +125,14 @@ class Uri implements UriInterface, PrototypeInterface
         $scheme = $this->getScheme();
         $port = $this->getComponent(PHP_URL_PORT);
 
-        if (empty($scheme) || empty($port)) {
+        if ($port === null) {
             return null;
         }
 
+        $port = (int) $port;
         $defaultPort = $this->getDefaultPort($scheme);
 
-        return $port === $defaultPort ? null : (int)$port;
+        return $port === $defaultPort ? null : $port;
     }
 
     /**
