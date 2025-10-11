@@ -105,6 +105,9 @@ class Message implements MessageInterface
      */
     public function getBody(): StreamInterface
     {
+        if ($this->body === null) {
+            throw new \RuntimeException('Body stream is not set.');
+        }
         return $this->body;
     }
 
